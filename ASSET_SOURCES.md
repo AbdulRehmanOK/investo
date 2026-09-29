@@ -42,7 +42,14 @@ Four original JPG attachments supplied by the user on 2026-09-24 replace the rep
 
 Descriptive alt text is available in German, English and French. These are illustrative photographs; their locations are not asserted.
 
-## Hero apartment photograph (restored 29 September 2026)
+## User-supplied hero apartment interior — 29 September 2026
+
+- Original: `public/images/apartment-interior.png`, copied from the user attachment `codex-clipboard-e6430f7d-62b7-4dd8-82fc-9f3864cfdcae.png`.
+- Responsive files: `public/images/optimized/apartment-interior-*.webp`.
+- Subject: An apartment dining/living interior with tall windows, plants and a dining table. The location and photographer have not been verified; no German or Berlin location is asserted.
+- Replaces the Berlin building only in the hero property tab at the user's request. The image is illustrative and is not identified as an Investo listing. The supplied original is retained; responsive compression and CSS framing fit the existing card.
+
+## Previous hero apartment photograph (restored 29 September 2026, subsequently replaced)
 
 `public/images/berlin-apartments.jpg`
 
@@ -53,6 +60,7 @@ Descriptive alt text is available in German, English and French. These are illus
 - License: CC0 1.0, as documented on the Wikimedia Commons source page (originally published before the Unsplash license change).
 - Used as illustrative property photography, not as a claim that this building is an Investo listing. Alt text marks it as a symbolic image.
 - Restored only in the hero property tab on 29 September 2026 following the requested replacement of the detached house with apartments in Germany. Other section photographs remain unchanged. Existing responsive WebP versions are reused; the Commons source and CC0 status were rechecked.
+- Subsequently replaced in the hero by the user-supplied interior photograph. The original building photograph and attribution are retained as a previous asset.
 
 ## Financing partner logos
 
@@ -82,4 +90,4 @@ The WebP files in public/images/optimized are resized and compressed versions of
 
 Inter and Lora are now served locally. Font source URLs and the bundled SIL Open Font License files are in public/fonts/SOURCES.md.
 
-The former blue-house hero derivative retains its 4:3 crop. The current Berlin apartment hero uses existing responsive derivatives of the full photograph with CSS framing for mobile and desktop. The faint villa-background derivative has its existing grayscale effect encoded into the image to avoid a large runtime filter. Original photographs remain available.
+The former blue-house hero derivative retains its 4:3 crop. The current user-supplied apartment interior uses responsive derivatives with CSS framing for mobile and desktop; the previous Berlin building derivatives are retained. The faint villa-background derivative has its existing grayscale effect encoded into the image to avoid a large runtime filter. Original photographs remain available.

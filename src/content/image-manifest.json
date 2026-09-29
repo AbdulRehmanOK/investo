@@ -202,5 +202,11 @@
     "srcSet": "/images/optimized/remote-fabe3f784c-7140efcd-160.webp 160w, /images/optimized/remote-fabe3f784c-7140efcd-320.webp 320w, /images/optimized/remote-fabe3f784c-7140efcd-640.webp 640w, /images/optimized/remote-fabe3f784c-7140efcd-960.webp 960w, /images/optimized/remote-fabe3f784c-7140efcd-1280.webp 1280w, /images/optimized/remote-fabe3f784c-7140efcd-1600.webp 1600w",
     "width": 5557,
     "height": 3697
+  },
+  "/images/apartment-interior.png": {
+    "src": "/images/optimized/apartment-interior-669d7d3e-480.webp",
+    "srcSet": "/images/optimized/apartment-interior-669d7d3e-160.webp 160w, /images/optimized/apartment-interior-669d7d3e-320.webp 320w, /images/optimized/apartment-interior-669d7d3e-480.webp 480w",
+    "width": 480,
+    "height": 640
   }
 }

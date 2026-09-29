@@ -290,16 +290,16 @@ export default function InteractiveHouseCard({ activeTab, onTabChange, onCtaClic
 
                 {/* Overlapping Interactive Property Container */}
                 <div className="relative w-full min-h-[230px] aspect-[4/3] md:aspect-[16/10] bg-gray-100 rounded-2xl overflow-hidden shadow-inner group">
-                  {/* Real Berlin Apartment Building */}
+                  {/* User-supplied apartment interior */}
                   <OptimizedImage
-                    src="/images/berlin-apartments.jpg"
+                    src="/images/apartment-interior.png"
                     loading="eager"
                     fetchPriority="high"
                     sizes="(min-width: 1280px) 560px, (min-width: 1024px) 50vw, calc(100vw - 80px)"
-                    alt={t("Wohngebäude in Berlin – Symbolbild")}
+                    alt={t("Wohnungsinterieur mit Esstisch und hohen Fenstern")}
                     decoding="async"
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover object-[40%_center] transition-transform duration-700 group-hover:scale-102"
+                    className="w-full h-full object-cover object-[center_45%] transition-transform duration-700 group-hover:scale-102"
                   />
 
                   {/* Gradient Overlay */}

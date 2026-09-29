@@ -1,5 +1,11 @@
 # Document change checklist
 
+## User-supplied hero interior — 29 September 2026
+
+- Replaced the hero property tab's Berlin building photo with the supplied apartment dining/living interior, retaining the existing card, tabs and animations.
+- Preserved the uploaded PNG and added responsive WebP versions. Image descriptions identify the interior without asserting an unverified location; the previous building attribution remains recorded in `ASSET_SOURCES.md`.
+- Validation: TypeScript and production prerender build passed; desktop (1440px) and mobile (390px) photo framing and loading checked, with no horizontal overflow or console errors. The largest served WebP is 62 KB; the original upload is preserved.
+
 ## Screenshot revisions — 29 September 2026
 
 English translation of the visible feedback dated 26 September 2026:
