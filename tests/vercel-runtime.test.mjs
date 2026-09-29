@@ -39,6 +39,8 @@ test('database initialization errors are sanitized and retried on a later invoca
 });
 test('runtime requires explicit launch settings and exact HTTPS origins',()=>{
   assert.equal(runtimeSettings(env).integrationReady,true);
+  assert.equal(runtimeSettings({...env,PROPSTACK_NEW_CONTACT_OWNER_ID:'443334'}).newContactOwnerId,443334);
+  assert.equal(runtimeSettings({...env,PROPSTACK_NEW_CONTACT_OWNER_ID:'443334'}).integrationReady,true);
   for(const change of [{INQUIRY_RETRY_SCHEDULE_CONFIRMED:'false'},{CRON_SECRET:''},{PROPSTACK_NEW_CONTACT_OWNER_ID:'99'}])assert.equal(runtimeSettings({...env,...change}).integrationReady,false);
   for(const origin of ['http://investo.example','https://user:password@investo.example','https://investo.example/path'])assert.throws(()=>runtimeSettings({...env,PUBLIC_SITE_URL:origin}));
   assert.throws(()=>runtimeSettings({...env,ALLOWED_ORIGINS:'https://investo.example/path'}));

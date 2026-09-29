@@ -19,6 +19,17 @@ async function harness(t,options={},overrides={}){
   return {crm,config,token,base,send:(payload,headers={})=>fetch(base()+'/api/inquiries',{method:'POST',headers:{origin:'https://investo.example','content-type':'application/json','idempotency-key':payload.submission_id,'x-submission-token':token,...headers},body:JSON.stringify(payload)}),status:(id,receiptToken=token)=>fetch(base()+'/api/inquiries/status/'+id,{headers:{authorization:'Bearer '+receiptToken}}),process:id=>instance.service.process(id),row:id=>instance.store.get(id),restart:async()=>{await stop();await start();}};
 }
 const writes=(h,route)=>h.crm.calls.filter(c=>c.method==='POST'&&new URL(c.url).pathname==='/v1'+route);
+test('shared intake owner is supported and existing advisor ownership is preserved',async t=>{
+ const h=await harness(t,{}, {newContactOwnerId:443334});const p=fixture();
+ assert.equal((await h.send(p)).status,201);
+ assert.equal(writes(h,'/contacts')[0].body.client.broker_id,443334);
+ assert.equal(writes(h,'/tasks')[0].body.task.broker_id,443334);
+ const shared=await harness(t,{contacts:[contact({broker_id:443334})]},{newContactOwnerId:443334});
+ assert.equal((await shared.send(fixture())).status,201);assert.equal(writes(shared,'/contacts').length,0);
+ assert.equal(writes(shared,'/tasks')[0].body.task.broker_id,443334);
+ const advisor=await harness(t,{contacts:[contact()]},{newContactOwnerId:443334});
+ assert.equal((await advisor.send(fixture())).status,201);assert.equal(writes(advisor,'/tasks')[0].body.task.broker_id,443427);
+});
 test('new inquiry uses exact account IDs, numeric dropdowns, comma-separated goals and readback before success',async t=>{
  const h=await harness(t),payload=fixture();const response=await h.send(payload);assert.equal(response.status,201);const receipt=await response.json();assert.equal(receipt.accepted,true);assert.ok(!Number.isNaN(Date.parse(receipt.received_at)));
  const c=writes(h,'/contacts')[0].body.client;assert.equal(c.broker_id,443333);assert.equal(c.client_source_id,364441);assert.equal(c.client_status_id,348539);assert.equal(c.home_cell,'+491701234567');assert.deepEqual(c.partial_custom_fields,{lead_phase_aktuell:355771,nettohaushaltseinkommen:320199,investmentziel:'320179,320180',utm_quelle:'google',utm_medium:'cpc',utm_kampagne:'strategy'});for(const key of ['newsletter','gdpr_status','approved'])assert.ok(!(key in c));

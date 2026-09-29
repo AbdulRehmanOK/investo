@@ -11,11 +11,12 @@ export function eligibleContact(contact,email) {
   // Unknown permission is not permission; never reactivate or overwrite a withdrawal.
   if(contact.archived!==false||contact.locked!==false||contact.deleted_at||contact.cp_delete_request_date||Number(contact.gdpr_status)===3||contact.accept_contact!==true)throw new ReviewRequired('contact_restricted');
   const owner=Number(contact.broker_id);
-  if(!CRM.ceoIds.includes(owner))throw new ReviewRequired('owner_review');
+  if(!CRM.allowedOwnerIds.includes(owner))throw new ReviewRequired('owner_review');
   return owner;
 }
 export function taskMatches(task,activity,{id,contact_id,owner_id}) {
-  const clients=task?.client_ids??activity?.client_ids;
+  // Propstack GET /tasks returns expanded clients, while write payloads use client_ids.
+  const clients=task?.client_ids??(Array.isArray(task?.clients)?task.clients.map(c=>c?.id):undefined)??activity?.client_ids??(Array.isArray(activity?.clients)?activity.clients.map(c=>c?.id):undefined);
   const marker=typeof task?.body==='string'?task.body.match(/^\s*<p>INV-SUBMISSION:([0-9a-f-]{36})<\/p>(?:\s|<|$)/i)?.[1]:null;
   return marker===id&&Number(task.note_type_id??activity?.category_id)===CRM.inquiryCategory&&Number(task.client_source_id??activity?.source_id)===CRM.source&&Number(task.broker_id??activity?.broker_id)===owner_id&&Array.isArray(clients)&&clients.length===1&&Number(clients[0])===contact_id;
 }

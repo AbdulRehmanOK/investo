@@ -13,7 +13,7 @@ npm start
 
 Open http://127.0.0.1:3001/. For development, run `npm run dev:api` and `npm run dev` in separate terminals. Vite on port 3000 proxies the API to 3001. If esbuild cannot access ancestor directories in a restricted environment, use `npm run build -- --configLoader runner`.
 
-Copy `.env.example` to `.env` and configure private server settings. Without Propstack/Turnstile credentials and approved consent, the form remains a review preview and cannot submit. The new-contact CEO assignment is an explicit business setting, not a browser choice.
+Copy `.env.example` to `.env` and configure private server settings. Without Propstack/Turnstile credentials and approved consent, the form remains a review preview and cannot submit. The confirmed new-contact owner is the shared info@ queue (443334), configured server-side; existing advisor owners are preserved.
 
 ## Inquiry flow
 Browser -> POST /api/inquiries -> exact Propstack contact resolution -> distinct inquiry activity -> Propstack signed event -> existing n8n callback worker.

@@ -21,11 +21,11 @@ export function runtimeSettings(env=process.env) {
   for(const origin of allowedOrigins){const url=new URL(origin);if(url.protocol!=='https:'||url.origin!==origin)throw Error('Set exact HTTPS allowed origins.');}
   const workerSecret=env.CRON_SECRET||'';
   return {siteUrl:parsed.origin,allowedOrigins,apiKey:env.PROPSTACK_API_KEY||'',
-    newContactOwnerId:CRM.ceoIds.includes(owner)?owner:null,
+    newContactOwnerId:CRM.allowedOwnerIds.includes(owner)?owner:null,
     consentApproved:env.CONTACT_CONSENT_APPROVED==='true',
     turnstileSiteKey:env.TURNSTILE_SITE_KEY||'',turnstileSecret:env.TURNSTILE_SECRET_KEY||'',workerSecret,
     // This setting is enabled only once an authenticated frequent retry schedule is verified.
-    integrationReady:CRM.ceoIds.includes(owner)&&workerSecret.length>=32&&env.INQUIRY_RETRY_SCHEDULE_CONFIRMED==='true',
+    integrationReady:CRM.allowedOwnerIds.includes(owner)&&workerSecret.length>=32&&env.INQUIRY_RETRY_SCHEDULE_CONFIRMED==='true',
     processBudgetMs:12000,timeoutMs:6000,serveStatic:false,clientIp:vercelClientIp};
 }
 const unavailableStore={health:async()=>false,close:async()=>{},limit:async()=>{throw Error('Storage unavailable.');}};

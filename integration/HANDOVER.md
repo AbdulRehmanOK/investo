@@ -34,7 +34,7 @@ Configure TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY for the actual domain. The
 
 Approve the exact consent wording in all enabled languages before setting CONTACT_CONSENT_APPROVED=true. If the wording changes, change CONSENT_VERSION and regenerate consent-text.json with it. Historical evidence remains the stored snapshot.
 
-Choose PROPSTACK_NEW_CONTACT_OWNER_ID only after agreeing the business rule: 443333 = Alpaslan, 443427 = Akay. Blank does not assign arbitrarily: the persistent Node server sends new contacts to local review with no CRM write, and the Vercel runtime keeps the form unavailable. No rotation/distribution rule was assumed. Existing eligible CEO owners are preserved. The choice and exact consent approval remain unresolved launch settings.
+Set PROPSTACK_NEW_CONTACT_OWNER_ID=443334 for the confirmed shared info@ intake queue. Existing eligible Alpaslan (443333), Akay (443427) and shared (443334) owners are preserved. No round robin. Exact consent wording approval is a separate launch setting.
 
 Set PUBLIC_SITE_URL to the HTTPS site origin and ALLOWED_ORIGINS to exact approved frontend origins. The backend applies durable per-IP limits of 10 submission attempts and 120 rate-limited API requests per minute with Retry-After, including failed bot attempts. The public readiness endpoint and separately authenticated retry worker are outside that shared limiter.
 
@@ -72,7 +72,7 @@ A deliberate Start another enquiry action after confirmation creates a new UUID.
 
 Uses the account IDs provided by the contract: source 364441, new-contact status 348539, phase option 355771, inquiry category 734823. Numeric income dropdowns and comma-separated goal IDs are defined in automation/website-mapping.mjs. The wrapper helper fieldValue reads custom field value wrappers.
 
-Only genuinely new contacts receive initial selected custom fields, original attribution and captured accept_contact:true. Existing exact matches are not updated. Archived, locked, deleted, withdrawn/unknown-permission, ambiguous-email and unassigned/non-CEO contacts require review; later submission never reverses withdrawal.
+Only genuinely new contacts receive initial selected custom fields, original attribution and captured accept_contact:true. Existing exact matches are not updated. Archived, locked, deleted, withdrawn/unknown-permission, ambiguous-email and unassigned/unsupported-owner contacts require review; later submission never reverses withdrawal.
 
 Each accepted submission creates its own /tasks inquiry linked to exactly one contact, with no is_event, is_reminder, appointment timestamp, property or callback-task creation. The inquiry contains original answers, experience, source attribution and separate consent evidence.
 

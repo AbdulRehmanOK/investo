@@ -25,11 +25,15 @@ export function fakeCrm(options={}){
       if(options.taskAbsent){state.tasks.pop();throw Error('write uncertain');}
       return Response.json({id:record.id,activity_id:record.id+10000},{status:201});
     }
-    if(route.startsWith('/tasks/'))return Response.json(state.tasks.find(c=>c.id===Number(route.split('/').at(-1))));
+    if(route.startsWith('/tasks/')){
+      const {client_ids,...task}=state.tasks.find(c=>c.id===Number(route.split('/').at(-1)));
+      return Response.json({...task,clients:client_ids.map(id=>({id}))});
+    }
     if(route==='/activities')return Response.json({data:state.tasks.filter(t=>t.client_ids.includes(Number(parsed.searchParams.get('client_id')))).map(t=>({id:t.id+10000})),meta:{total_count:state.tasks.length}});
     if(route.startsWith('/activities/')){
       const task=state.tasks.find(c=>c.id+10000===Number(route.split('/').at(-1)));
-      return Response.json({id:task.id+10000,activatable_type:'Task',activatable:task,client_ids:task.client_ids,category_id:task.note_type_id,source_id:task.client_source_id,broker_id:task.broker_id});
+      const {client_ids,...expanded}=task;
+      return Response.json({id:task.id+10000,activatable_type:'Task',activatable:{...expanded,clients:client_ids.map(id=>({id}))},category_id:task.note_type_id,source_id:task.client_source_id,broker_id:task.broker_id});
     }
     throw Error('Unexpected vendor route '+route);
   }

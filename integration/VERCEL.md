@@ -4,7 +4,7 @@
 
 The public frontend is at https://investo-blush.vercel.app/. The repository includes the backend functions, shared PostgreSQL store and protected retry endpoint needed to run the existing Propstack integration on Vercel. Adding these files does not itself configure the Vercel account, credentials, database or scheduler. Production endpoint availability and live Propstack/n8n acceptance must be verified after deployment.
 
-No production keys, database connection or Vercel account access have been supplied with this implementation. The new-contact CEO choice and approval of the exact consultation consent remain business decisions. Do not set approval/readiness flags just to hide a configuration error.
+No production keys, database connection or Vercel account access have been supplied with this implementation. The new-contact shared owner is confirmed as 443334. Approval of the exact consultation consent remains a business decision. Do not set approval/readiness flags just to hide a configuration error.
 
 ## Project root, build and routing
 
@@ -40,7 +40,7 @@ Set the following in Vercel's private environment settings for the target enviro
 | --- | --- |
 | `DATABASE_URL` | Private managed PostgreSQL connection string. `POSTGRES_URL` is an alias; `DATABASE_URL` takes precedence. Use shared durable storage reachable from the functions. |
 | `PROPSTACK_API_KEY` | Private key for the account and permissions described in `CONTRACT-v1.md`. The API base is fixed to `https://api.propstack.de/v1`. |
-| `PROPSTACK_NEW_CONTACT_OWNER_ID` | Agreed CEO: `443333` (Alpaslan) or `443427` (Akay). No owner or distribution rule is chosen automatically. |
+| `PROPSTACK_NEW_CONTACT_OWNER_ID` | Set `443334` for the agreed shared info@ intake queue. Existing `443333` (Alpaslan) and `443427` (Akay) owners are preserved. No round robin. |
 | `CONTACT_CONSENT_APPROVED` | `true` only after the owner approves the exact enabled-language wording in `shared/lead-schema.mjs` and `consent-text.json`. Current version is `2026-09-24-v1`; the version alone is not approval. |
 | `TURNSTILE_SITE_KEY` | Public Cloudflare Turnstile site key registered for the deployed hostname. |
 | `TURNSTILE_SECRET_KEY` | Matching private Turnstile secret. Verification also checks hostname, action `investo-inquiry`, and submission UUID. |

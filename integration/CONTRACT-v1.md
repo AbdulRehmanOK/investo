@@ -57,7 +57,7 @@ Base `https://api.propstack.de/v1`; authentication `X-API-KEY` from private serv
 1. `GET /contacts?email=<encoded-normalized-email>&archived=-1&include_children=true`. Verify exact email match in results; do not use a fuzzy name match. Multiple matches, archived/locked/deleted records or withdrawn permission require review. Do not silently reactivate them.
 2. Reuse the exact contact. Preserve its owner, original acquisition source and established lifecycle. Record later answers/attribution in the inquiry instead of overwriting advisor-reviewed information.
 3. For a genuinely new contact, `POST /contacts` with `{ "client": { ... } }`. Propstack can update by email on this endpoint, so lookup and concurrency protection still matter. Use source `364441` for this strategy-check form, contact status `348539` if setting a new-contact status, and selected custom fields below.
-4. Owner must be assigned server-side. CEO IDs: Alpaslan `443333`; Akay `443427`. Existing contact owner is preserved. The new-lead distribution rule remains a business setting to agree; do not hard-code arbitrary browser selection. The callback worker sends unassigned/non-CEO contacts to review instead of guessing an owner.
+4. Owner is assigned server-side: use shared holding owner `443334` (info@investo-immobilien.de) for new contacts. Preserve existing Alpaslan `443333`, Akay `443427` or shared ownership. No round robin. Unsupported/missing owners require review. Advisors claim both contact and open callback task.
 5. Store consultation permission evidence (purpose, approved text/version, receipt time) in the inquiry. `accept_contact:true` must reflect valid captured permission; a later submission must not silently reverse a withdrawal. Do not set newsletter consent, GDPR agreement, approval or finance readiness from a generic checkbox.
 6. Create the inquiry even when the contact already exists:
 
@@ -103,7 +103,7 @@ Read responses wrap each custom field in `{ "value": ..., "pretty_value": ... }`
 
 ## What n8n does after the inquiry
 
-Propstack → authenticated task-created webhook → durable event inbox → scheduled worker → fresh inquiry/contact reads → duplicate/reconciliation checks → callback task category `710193` for the existing CEO owner. Existing open callback tasks are reused; repeated delivery of the same submission does not create another task. Withdrawn/locked/archived contacts are suppressed. Missing owner and ambiguous writes go to the incident queue.
+Propstack → authenticated task-created webhook → durable event inbox → scheduled worker → fresh inquiry/contact reads → duplicate/reconciliation checks → callback task category `710193` for the existing eligible advisor/shared owner. Existing open callback tasks are reused; repeated delivery of the same submission does not create another task. Withdrawn/locked/archived contacts are suppressed. Missing owner and ambiguous writes go to the incident queue.
 
 This flow does not currently book appointments, email customers, run PriceHubble valuations, reject finance applications or create property deals. The website must not promise those actions have occurred.
 

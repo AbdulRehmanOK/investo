@@ -50,7 +50,7 @@ export function createInquiryService({store,apiKey,newContactOwnerId,fetchImpl,t
             if(row.attempts>=3)throw new ReviewRequired('contact_creation_uncertain');
             return await store.get(id);
           }
-          if(!CRM.ceoIds.includes(newContactOwnerId))throw new ReviewRequired('new_owner_not_configured');
+          if(!CRM.allowedOwnerIds.includes(newContactOwnerId))throw new ReviewRequired('new_owner_not_configured');
           // A crash/timeout after this durable checkpoint can only reconcile;
           // another worker must never repeat the possibly successful POST.
           remaining();await set({phase:'contact_create_started'});
