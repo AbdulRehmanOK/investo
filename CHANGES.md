@@ -1,5 +1,15 @@
 # Document change checklist
 
+## Screenshot revisions — 29 September 2026
+
+English translation of the visible feedback dated 26 September 2026:
+1. Replace the house with an apartment in Germany.
+2. Remove the statistics strip because it is duplicated further down. The end of this note is partly obscured in the supplied screenshot.
+
+- Replaced the detached-house hero photo with the existing real Berlin apartment-building photograph by Grant Lemons, using responsive local WebP files and translated illustrative alt text. Adjusted its crop while keeping the existing card, tabs and animations.
+- Removed the standalone white 12+ / 100+ / 15+ / 50+ statistics strip and its unused component. The figures in the lower trust section remain, as does the separate hero credibility summary.
+- Validation: TypeScript and production prerender build passed. Desktop and 390/320px mobile checks confirmed the new image loads, no horizontal overflow, the duplicate section is absent and the lower trust metrics remain. Existing DE/EN/FR image descriptions are reused. No new performance score is claimed.
+
 ## Minimal hero card accents — 26 September 2026
 
 - Added the approved thin gold orbit with a slow traveling dot behind the existing hero card, plus a short gold highlight following its rounded edge. Existing layout, photographs, content, architectural illustration and interactive panels remain intact.

@@ -12,7 +12,6 @@ import ProblemSolutionSection from './components/ProblemSolutionSection';
 import StrategyCheckSection from './components/StrategyCheckSection';
 import InvestmentPhilosophySection from './components/InvestmentPhilosophySection';
 import TargetGroupsSection from './components/TargetGroupsSection';
-import InvestmentExamplesSection from './components/InvestmentExamplesSection';
 import WhyInvestoSection from './components/WhyInvestoSection';
 import TrustAuthoritySection from './components/TrustAuthoritySection';
 import FinancingPartnersSection from './components/FinancingPartnersSection';
@@ -105,9 +104,6 @@ export default function App() {
 
       {/* 6. Investment Philosophy section (crisp elegant white theme with wave) */}
       <Suspense fallback={null}><InvestmentPhilosophySection onCtaClick={() => openForm()} /></Suspense>
-
-      {/* Credibility statistics; the removed investment examples and returns strip stay absent. */}
-      <Suspense fallback={null}><InvestmentExamplesSection onCtaClick={() => openForm()} /></Suspense>
 
       {/* 8. Target Groups section (deep space-blue/gold theme with connection tree) */}
       <Suspense fallback={null}><TargetGroupsSection onCtaClick={() => openForm()} /></Suspense>
