@@ -1,5 +1,12 @@
 # Document change checklist
 
+## Vercel inquiry backend support — 30 September 2026
+
+- Added Vercel function entries for the inquiry config, submission and receipt-status routes, plus a secret-protected retry worker. Explicit legal/thank-you rewrites preserve the API routing.
+- Added shared PostgreSQL state, a versioned isolated-schema migration, verified database TLS and asynchronous state handling for serverless instances. The persistent Node/SQLite development path remains available.
+- Bounded function processing and durable retry scheduling preserve pre-write intent, receipt deduplication, contact locks and reconciliation. The bundled daily cron is a backup; live readiness also requires a verified frequent worker schedule.
+- Documented repository-root deployment, private credentials/storage, owner/consent gates, staging checks and PostgreSQL operator reconciliation in `integration/VERCEL.md` and the handover. Production deployment and live Propstack/n8n acceptance are not asserted by this entry.
+
 ## User-supplied hero interior — 29 September 2026
 
 - Replaced the hero property tab's Berlin building photo with the supplied apartment dining/living interior, retaining the existing card, tabs and animations.

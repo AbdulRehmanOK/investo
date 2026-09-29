@@ -1,6 +1,8 @@
 import {CRM} from '../automation/website-mapping.mjs';
 export class ReviewRequired extends Error {}
 export class VendorUnavailable extends Error {}
+// A stopped worker must not turn a failed lease/budget check into a vendor retry.
+export class ProcessingDeferred extends Error {}
 const integer=value=>Number.isSafeInteger(Number(value))&&Number(value)>0;
 export const recordId=record=>integer(record?.id)?Number(record.id):null;
 export const emailsOf=contact=>[contact?.email,...(Array.isArray(contact?.emails)?contact.emails:[])].filter(x=>typeof x==='string').map(x=>x.trim().toLowerCase());
@@ -19,12 +21,21 @@ export function taskMatches(task,activity,{id,contact_id,owner_id}) {
 }
 export function createPropstack({apiKey,fetchImpl=fetch,timeoutMs=10000}) {
   async function request(route,{method='GET',body,before=()=>{}}={}) {
-    before();
+    // The persisted lease renewal and write intent must finish before any fetch.
+    // Keep this outside the vendor catch so stale claims stop processing directly.
+    const remainingMs=await before();
+    if(typeof remainingMs==='number'&&remainingMs<=0)throw new ProcessingDeferred('budget_exhausted');
+    const requestTimeout=Math.max(1,Math.floor(typeof remainingMs==='number'?Math.min(timeoutMs,remainingMs):timeoutMs));
+    const budgetLimited=typeof remainingMs==='number'&&remainingMs<=timeoutMs;
+    const signal=AbortSignal.timeout(requestTimeout);
     try {
-      const response=await fetchImpl(`https://api.propstack.de/v1${route}`,{method,headers:{'X-API-KEY':apiKey,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{}),redirect:'error',signal:AbortSignal.timeout(timeoutMs)});
+      const response=await fetchImpl(`https://api.propstack.de/v1${route}`,{method,headers:{'X-API-KEY':apiKey,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{}),redirect:'error',signal});
       if(!response.ok)throw new VendorUnavailable('vendor_unavailable');
       return await response.json();
-    }catch{throw new VendorUnavailable('vendor_unavailable');}
+    }catch{
+      if(budgetLimited&&signal.aborted)throw new ProcessingDeferred('budget_exhausted');
+      throw new VendorUnavailable('vendor_unavailable');
+    }
   }
   async function list(route,params,before) {
     const items=[];

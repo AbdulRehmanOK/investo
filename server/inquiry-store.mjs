@@ -30,10 +30,10 @@ export function createStore(filename) {
   function update(id,token,changes) {
     const allowed=['status','phase','contact_id','owner_id','inquiry_id','review_reason','next_attempt'];
     const entries=Object.entries(changes);if(entries.some(([key])=>!allowed.includes(key)))throw Error('Invalid state transition.');
-    const result=db.prepare(`UPDATE inquiries SET ${entries.map(([key])=>key+'=?').join(',')},lease_until=? WHERE id=? AND lease_token=?`).run(...entries.map(([,value])=>value),Date.now()+90000,id,token);
+    const result=db.prepare(`UPDATE inquiries SET ${entries.map(([key])=>key+'=?').join(',')},lease_until=? WHERE id=? AND lease_token=? AND lease_until>?`).run(...entries.map(([,value])=>value),Date.now()+90000,id,token,Date.now());
     if(!result.changes)throw Error('Lease lost.');
   }
-  function touch(id,token) {const r=db.prepare('UPDATE inquiries SET lease_until=? WHERE id=? AND lease_token=?').run(Date.now()+90000,id,token);if(!r.changes)throw Error('Lease lost.');}
+  function touch(id,token) {const r=db.prepare('UPDATE inquiries SET lease_until=? WHERE id=? AND lease_token=? AND lease_until>?').run(Date.now()+90000,id,token,Date.now());if(!r.changes)throw Error('Lease lost.');}
   function emailLock(row) {db.prepare('INSERT OR IGNORE INTO contact_locks VALUES (?,?)').run(row.email_hash,row.id);return db.prepare('SELECT submission_id FROM contact_locks WHERE email_hash=?').get(row.email_hash)?.submission_id===row.id;}
   const unlockEmail=id=>db.prepare('DELETE FROM contact_locks WHERE submission_id=?').run(id);
   function limit(key,max,windowMs=60000) {
@@ -42,7 +42,8 @@ export function createStore(filename) {
     const item=db.prepare('INSERT INTO request_limits (key,count,reset) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 RETURNING count,reset').get(hash(key),now+windowMs);
     return {allowed:item.count<=max,retryAfter:Math.max(1,Math.ceil((item.reset-now)/1000))};
   }
-  return {get,reserve,claim,update,touch,emailLock,unlockEmail,limit,
+  const reopenForReconciliation=id=>!!db.prepare("UPDATE inquiries SET status='pending',next_attempt=0 WHERE id=? AND phase='inquiry_create_started' AND status<>'accepted' AND lease_until<=?").run(id,Date.now()).changes;
+  return {get,reserve,claim,update,touch,emailLock,unlockEmail,limit,reopenForReconciliation,health:()=>true,
     release:(id,token)=>db.prepare('UPDATE inquiries SET lease_token=NULL,lease_until=0 WHERE id=? AND lease_token=?').run(id,token),
     pending:()=>db.prepare("SELECT id FROM inquiries WHERE status='pending' AND lease_until<? AND next_attempt<=? ORDER BY received_at LIMIT 10").all(Date.now(),Date.now()),
     close:()=>db.close()};
