@@ -4,11 +4,11 @@
 
 The public frontend is at https://investo-blush.vercel.app/. The repository includes the backend functions, shared PostgreSQL store and protected retry endpoint needed to run the existing Propstack integration on Vercel. Adding these files does not itself configure the Vercel account, credentials, database or scheduler. Production endpoint availability and live Propstack/n8n acceptance must be verified after deployment.
 
-No production keys, database connection or Vercel account access have been supplied with this implementation. The new-contact shared owner is confirmed as 443334. Approval of the exact consultation consent remains a business decision. Do not set approval/readiness flags just to hide a configuration error.
+The Propstack key is held separately in private implementation configuration and must be added to the new Vercel project securely. Database and Turnstile configuration still need to be provisioned and verified. The new-contact shared owner is confirmed as 443334. Approval of the exact consultation consent remains a business decision. Do not set approval/readiness flags just to hide a configuration error.
 
 ## Project root, build and routing
 
-Connect the project to `urrwa/investo`, using the intended production branch. In Vercel Project Settings set:
+Connect the project to `AbdulRehmanOK/investo`, using the intended production branch. In Vercel Project Settings set:
 
 | Setting | Value |
 | --- | --- |
@@ -78,7 +78,7 @@ This worker endpoint is separate from Propstack's signed event to the existing n
 
 Run `npm run lint`, `npm test` and `npm run build` before deployment. Tests include simulated Propstack/Turnstile responses and PostgreSQL-engine storage checks; they do not prove production database connectivity, provider TLS, secrets or CRM/n8n behavior.
 
-Implementation verification: 61 automated tests passed, TypeScript passed, and the production prerender build passed. The worker uses a 30-second processing budget within its 60-second function limit, with 3-second database query limits and time reserved for durable finalization. Repeated reconciliation budget exhaustion moves uncertain inquiries to operator review without another POST.
+Implementation verification: 63 automated tests passed, TypeScript passed, and the production prerender build passed. The worker uses a 30-second processing budget within its 60-second function limit, with 3-second database query limits and time reserved for durable finalization. Repeated reconciliation budget exhaustion moves uncertain inquiries to operator review without another POST.
 
 After Vercel reports a successful deployment:
 
